@@ -1,0 +1,69 @@
+---
+name: evcc (custom build)
+version: 0.315.2-micrologic.1
+slug: evcc-custom
+description: evcc 0.315.2 plus the Schneider MicroLogic meter template
+url: https://github.com/ilian002/evcc/tree/build/custom-image
+stage: stable
+
+boot: auto
+startup: application
+init: false
+watchdog: http://[HOST]:[PORT:7070]
+
+panel_icon: mdi:ev-station
+panel_admin: false
+ingress: true
+ingress_port: 7070
+webui: http://[HOST]:[PORT:7070]/
+
+host_network: true
+legacy: true
+uart: true
+homeassistant_api: true
+
+arch:
+  - aarch64
+
+map:
+  - type: addon_config
+    read_only: False
+  - type: homeassistant_config
+    read_only: False
+
+ports:
+  4712/tcp: 4712
+  5200/tcp: 5200
+  5201/tcp: 5201
+  5353/udp: 5353
+  7050/tcp: 7050
+  7090/udp: 7090
+  8887/tcp: 8887
+  8899/udp: 8899
+  9522/udp: 9522
+
+ports_description:
+  4712/tcp: "EEBUS"
+  5200/tcp: "Modbus Proxy"
+  5201/tcp: "Modbus Proxy (multi port)"
+  5353/udp: "Multicast DNS (mDNS)"
+  7050/tcp: "evopt API"
+  7090/udp: "Keba"
+  8887/tcp: "OCPP web socket"
+  8899/udp: "Modbus UDP"
+  9522/udp: "SMA Speedwire Multicast"
+
+image: ghcr.io/ilian002/evcc
+
+# Shared with the official add-on so the UI-built device configuration survives
+# switching between them. A per-add-on /data volume would strand it.
+options:
+  sqlite_file: /homeassistant/evcc.db
+  config_file: /homeassistant/evcc.yaml
+
+schema:
+  sqlite_file: str
+  config_file: str?
+  OPTIMIZER_URI: url?
+  SEMP_BASE_URL: url?
+  EVCC_REMOTE_ACCESS: str?
