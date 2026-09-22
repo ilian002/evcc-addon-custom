@@ -1,8 +1,8 @@
 ---
 name: evcc (custom build)
-version: 0.315.2-micrologic.1
+version: 0.316.0-micrologic.1
 slug: evcc-custom
-description: evcc 0.315.2 plus the Schneider MicroLogic meter template
+description: evcc 0.316.0 plus the Schneider MicroLogic meter template
 url: https://github.com/ilian002/evcc/tree/build/custom-image
 stage: stable
 
