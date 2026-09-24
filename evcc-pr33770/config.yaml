@@ -1,0 +1,41 @@
+---
+name: evcc (PR 33770 test)
+version: 0.316.0-pr33770.1
+slug: evcc-pr33770
+description: evcc 0.316.0 with the MicroLogic template as it stands in evcc-io/evcc#33770, as a second instance
+url: https://github.com/ilian002/evcc/tree/build/pr-33770
+stage: experimental
+
+boot: manual
+startup: application
+init: false
+watchdog: http://[HOST]:[PORT:7071]
+
+panel_icon: mdi:flask-outline
+panel_admin: false
+ingress: true
+ingress_port: 7071
+webui: http://[HOST]:[PORT:7071]/
+
+host_network: true
+legacy: true
+homeassistant_api: true
+
+arch:
+  - aarch64
+
+map:
+  - type: homeassistant_config
+    read_only: False
+
+image: ghcr.io/ilian002/evcc
+
+# Own database and config, so the production add-on's devices are never touched.
+# The config file sets port 7071; it has to exist before the first start.
+options:
+  sqlite_file: /homeassistant/evcc-pr33770.db
+  config_file: /homeassistant/evcc-pr33770.yaml
+
+schema:
+  sqlite_file: str
+  config_file: str?
