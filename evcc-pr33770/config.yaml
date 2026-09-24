@@ -28,6 +28,15 @@ map:
   - type: homeassistant_config
     read_only: False
 
+# Informational only: with host_network the ports come from the environment below
+ports:
+  4713/tcp: 4713
+  8888/tcp: 8888
+
+ports_description:
+  4713/tcp: "EEBUS (fixed by EVCC_EEBUS_PORT)"
+  8888/tcp: "OCPP web socket (fixed by EVCC_OCPP_PORT)"
+
 image: ghcr.io/ilian002/evcc
 
 # Own ports, so it runs next to the production add-on on host networking
