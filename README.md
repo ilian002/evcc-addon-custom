@@ -40,18 +40,9 @@ Bump `IMAGE_TAG` in `.github/workflows/build-image.yml` on the `build/custom-ima
 It shares nothing with production:
 
 - **Own database** `/homeassistant/evcc-pr33770.db`. The PR's template dropped the `tripunit` and `systemtype` params, and evcc rejects a stored device with a key its template no longer has (`invalid key`). Pointed at the production database, it would fail to load every MicroLogic meter there.
-- **Own port 7071**, set in `/homeassistant/evcc-pr33770.yaml`. Both instances use `host_network: true`, and evcc only reads the port from the config file while its database has no network settings. So **create that file before the first start**, or the instance comes up on 7070 and collides with production:
-
-  ```yaml
-  network:
-    port: 7071
-    host: evcc-pr33770
-  ```
-
+- **Own ports**, set as environment variables in `evcc-pr33770/config.yaml`: UI on **7071**, OCPP on 8888, EEBus on 4713, mDNS name `evcc-pr33770`. Both instances use `host_network: true`, so the defaults (7070, 8887, 4712) would collide with production. evcc reads `EVCC_`-prefixed variables for any config key, with or without a config file. Ports saved later in the instance's own UI or database take precedence over these variables, so don't change network settings there.
 - **Not started on boot**, and nothing to control: add only meters to it. Leave out chargers, loadpoints, circuits and MQTT, so production stays the only instance acting on the site or publishing to the broker.
 
 Both instances poll the same breakers through the Modbus gateway, which doubles the read load on the serial line.
-
-With production running, the test instance logs `ocpp: timeout waiting for server to bind` and `eebus: … listen tcp :4712: bind: address already in use` on every start. Both are expected and harmless: production holds those ports, and the test instance uses neither.
 
 Rebuild the same way as above, on the `build/pr-33770` branch, with `version:` in `evcc-pr33770/config.yaml` raised to match.
