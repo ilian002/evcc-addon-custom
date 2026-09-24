@@ -52,4 +52,6 @@ It shares nothing with production:
 
 Both instances poll the same breakers through the Modbus gateway, which doubles the read load on the serial line.
 
+With production running, the test instance logs `ocpp: timeout waiting for server to bind` and `eebus: … listen tcp :4712: bind: address already in use` on every start. Both are expected and harmless: production holds those ports, and the test instance uses neither.
+
 Rebuild the same way as above, on the `build/pr-33770` branch, with `version:` in `evcc-pr33770/config.yaml` raised to match.
